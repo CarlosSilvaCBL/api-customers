@@ -1,0 +1,54 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq_api-customers
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ./definitions_api-customers.json:/etc/definitions_api-customers.json:ro
+      - ./rabbitmq_api-customers.config:/etc/rabbitmq_api-customers.config:ro
+  #stubby4j:
+  #  image: api-customers/stubby4j-docker
+  #  ports:
+  #    - "8882:8882"
+  #  environment:
+  #    STUBBY_PORT: "8882"
+  #  volumes:
+  #    - ./stubby.yml:/usr/local/stubby.yml
+
+  api-customers:
+    container_name: api-customers
+    image: app:latest
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    depends_on:
+      - postgresqldb
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres:5432/api-customers"
+      SPRING_DATASOURCE_USERNAME: "postgres"
+      SPRING_DATASOURCE_PASSWORD: "123456"
+    networks:
+      - postgres
+
+  postgresqldb:
+    image: postgres:latest
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    expose:
+      - "5432"
+    environment:
+      POSTGRES_DB: "api-customers"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "123456"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+networks:
+  postgres:

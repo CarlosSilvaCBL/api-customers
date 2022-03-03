@@ -1,0 +1,43 @@
+domain:
+  viacep:
+    url: http://localhost:8882
+
+logging:
+  config: classpath:logback-dev.xml
+  level:
+    root: INFO
+server:
+  forward-headers-strategy: framework
+  port: 8080
+spring:
+  application:
+    name: api-customers
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://db:5432/api-customers
+    username: postgres
+    password: 123456
+  hateoas:
+    use-hal-as-default-json-media-type: false
+  http:
+    encoding:
+      charset: UTF-8
+  jackson:
+    parser:
+      allow-backslash-escaping-any-character: true
+      allow-unquoted-control-chars: true
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create-drop
+    open-in-view: false
+    properties:
+      hibernate:
+        proc:
+          param_null_passing: true
+        temp:
+          use_jdbc_metadata_defaults: false
+    show-sql: true
+  main:
+    banner-mode: 'OFF'
