@@ -1,7 +1,3 @@
-domain:
-    viacep:
-        url: viacep.com.br/ws/
-
 logging:
     config: classpath:logback-spring.xml
     level:

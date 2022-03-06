@@ -5,15 +5,12 @@
 ### Tecnologias
 - Spring-boot
 - PostgreSQL
-- Stubby4j
 - Lombok
 - Swagger
-- Docke-Compose
+- Docker-Compose
 
 ### Pré-requisitos 
   - Versão 11 do java
-  
-    ```
 
 ## Para rodar o docker-compose
 

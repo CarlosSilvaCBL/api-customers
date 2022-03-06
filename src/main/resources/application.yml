@@ -1,7 +1,3 @@
-domain:
-  viacep:
-    url: http://localhost:8882
-
 logging:
   config: classpath:logback-dev.xml
   level:
@@ -14,7 +10,7 @@ spring:
     name: api-customers
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://db:5432/api-customers
+    url: jdbc:postgresql://localhost:5432/api-customers
     username: postgres
     password: 123456
   hateoas:
@@ -39,5 +35,9 @@ spring:
         temp:
           use_jdbc_metadata_defaults: false
     show-sql: true
+    defer-datasource-initialization: true
+    sql:
+      init:
+        mode: always 
   main:
     banner-mode: 'OFF'
