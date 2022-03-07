@@ -41,21 +41,4 @@ public class CustomerModel extends RepresentationModel<CustomerModel> {
 	@Schema(description = "Numero documento")
 	private String documentNumber;
 	
-   // @Schema(description = "rua")
-  //  private String street;
-    
-  //  @Schema(description = "cidade")
-  //  private String city;
-   //@NotBlank(message = "The Zip code is required.")
-//	  @Pattern(regexp = "^\\d{1,5}$", flags = { Flag.CASE_INSENSITIVE, Flag.MULTILINE }, message = "The Zip code is invalid.")
-
-  //  @Schema(description = "Codigo Postal")
- //   private String postalCode;
-
- //   @Schema(description = "Provincia")
-  //  private String province;
-    
-  //  @Schema(description = "Pais")
-  //  private String country;
-    
 }

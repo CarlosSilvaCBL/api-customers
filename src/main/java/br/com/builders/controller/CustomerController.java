@@ -9,8 +9,6 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.builders.assmbler.CustomerModelAssembler;
+import br.com.builders.assembler.CustomerModelAssembler;
 import br.com.builders.entity.CustomerEntity;
 import br.com.builders.enums.DocumentTypeEnum;
 import br.com.builders.model.CustomerModel;
@@ -36,8 +34,9 @@ import br.com.builders.request.CustomerRequest;
 import br.com.builders.service.CustomerService;
 import br.com.builders.util.Constants;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = Constants.BASE_PATH_CUSTOMER, produces = APPLICATION_JSON_VALUE)
@@ -48,8 +47,6 @@ public class CustomerController {
 	
 	@Autowired
 	CustomerModelAssembler customerModelAssembler;
-	
-	final Logger log = LoggerFactory.getLogger(CustomerController.class);
 	
 	@GetMapping
 	public ResponseEntity<List<CustomerModel>> find(
@@ -136,7 +133,7 @@ public class CustomerController {
 
 		} catch (Exception e) {
 			log.error("Erro ao deletar cliente com id: {}", id);
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 	}
 

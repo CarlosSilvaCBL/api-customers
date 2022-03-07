@@ -1,4 +1,4 @@
-package br.com.builders.assmbler;
+package br.com.builders.assembler;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
@@ -6,19 +6,16 @@ import org.springframework.stereotype.Component;
 import br.com.builders.controller.CustomerController;
 import br.com.builders.entity.CustomerEntity;
 import br.com.builders.model.CustomerModel;
+import lombok.extern.slf4j.Slf4j;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
+@Slf4j
 @Component
 public class CustomerModelAssembler extends RepresentationModelAssemblerSupport<CustomerEntity, CustomerModel> {
 	
-	final Logger log = LoggerFactory.getLogger(CustomerModelAssembler.class);
-
 	public CustomerModelAssembler() {
 		super(CustomerController.class, CustomerModel.class);
 	}

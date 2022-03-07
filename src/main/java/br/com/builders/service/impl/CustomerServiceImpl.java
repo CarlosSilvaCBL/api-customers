@@ -1,14 +1,12 @@
 package br.com.builders.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import br.com.builders.controller.CustomerController;
 import br.com.builders.entity.CustomerEntity;
 import br.com.builders.exception.BusinessException;
 import br.com.builders.repository.CustomerRepository;
@@ -16,11 +14,10 @@ import br.com.builders.service.CustomerService;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
-
-	final Logger log = LoggerFactory.getLogger(CustomerController.class);
 
 	final CustomerRepository repository;
 

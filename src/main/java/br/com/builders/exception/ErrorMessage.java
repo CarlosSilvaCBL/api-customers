@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.util.StringUtils;
-
 import java.io.Serializable;
 
 @Data
@@ -28,11 +26,6 @@ public class ErrorMessage implements Serializable {
 		link = identification;
 	}
 
-	public ErrorMessage(final String code, final String msg) {
-		this.code = code;
-		message = msg;
-	}
-	
 	public ErrorMessage(final String msg) {
 		message = msg;
 	}
@@ -41,23 +34,12 @@ public class ErrorMessage implements Serializable {
 		return code;
 	}
 
-	public void setCode(final String code) {
-		this.code = StringUtils.trimAllWhitespace(code);
-	}
-
 	public String getMessage() {
 		return message;
-	}
-
-	public void setMessage(final String message) {
-		this.message = StringUtils.trimAllWhitespace(message);
 	}
 
 	public String getLink() {
 		return link;
 	}
 
-	public void setLink(final String link) {
-		this.link = StringUtils.trimAllWhitespace(link);
-	}
 }
