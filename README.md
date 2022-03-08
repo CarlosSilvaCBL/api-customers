@@ -32,3 +32,7 @@ Execute o comando abaixo:
 ```bash
 docker-compose stop
 ```
+
+## Collection Postman
+- Arquivo: "Api Clientes - Builders.postman_collection.json", que se encontra
+na raiz do projeto api-customers
