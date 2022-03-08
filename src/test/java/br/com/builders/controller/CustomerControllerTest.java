@@ -40,15 +40,13 @@ public class CustomerControllerTest {
 	@Autowired
 	CustomerController controller;
 
-	HttpHeaders headers = new HttpHeaders();
-
 	@Test
 	void testDelete() {
 		CustomerRequest requestFrank = new CustomerRequest("Frank", LocalDate.now(), DocumentTypeEnum.PASSPORT, UUID.randomUUID().toString());
 		try {
 			ResponseEntity<Link> linkRequestSaveFrank = controller.save(requestFrank);
 
-			HttpEntity<CustomerRequest> entityDelete = new HttpEntity<CustomerRequest>(requestFrank, headers);
+			HttpEntity<CustomerRequest> entityDelete = new HttpEntity<CustomerRequest>(requestFrank, new HttpHeaders());
 			
 			ResponseEntity<String> responseDelete = restTemplate.exchange(
 					criaUrl(linkRequestSaveFrank.getBody().getHref()),
@@ -65,7 +63,7 @@ public class CustomerControllerTest {
 		CustomerRequest requestFrank = new CustomerRequest("Frank", LocalDate.now(), DocumentTypeEnum.PASSPORT, UUID.randomUUID().toString());
 		try {
 
-			HttpEntity<CustomerRequest> entityDelete = new HttpEntity<CustomerRequest>(requestFrank, headers);
+			HttpEntity<CustomerRequest> entityDelete = new HttpEntity<CustomerRequest>(requestFrank, new HttpHeaders());
 			
 			ResponseEntity<String> responseDelete = restTemplate.exchange(
 					criaUrl("/api-customers/v1/customers/999999999"),
@@ -83,7 +81,7 @@ public class CustomerControllerTest {
 		try {
 			ResponseEntity<Link> linkRequestSaveFrank = controller.save(requestFrank);
 			
-			HttpEntity<CustomerRequest> entityFind = new HttpEntity<CustomerRequest>(requestFrank, headers);
+			HttpEntity<CustomerRequest> entityFind = new HttpEntity<CustomerRequest>(requestFrank, new HttpHeaders());
 			
 			ResponseEntity<String> responseFind = restTemplate.exchange(
 					criaUrl(linkRequestSaveFrank.getBody().getHref()),
@@ -107,7 +105,7 @@ public class CustomerControllerTest {
 			ResponseEntity<Link> linkRequestSaveFrank = controller.save(requestFrank);
 
 			CustomerRequest requestFrankUpdate = new CustomerRequest("Frank da Silva", LocalDate.now(), DocumentTypeEnum.PASSPORT, "101010101010");
-			HttpEntity<CustomerRequest> entityPut = new HttpEntity<CustomerRequest>(requestFrankUpdate, headers);
+			HttpEntity<CustomerRequest> entityPut = new HttpEntity<CustomerRequest>(requestFrankUpdate, new HttpHeaders());
 			
 			ResponseEntity<String> responsePut = restTemplate.exchange(
 					criaUrl(linkRequestSaveFrank.getBody().getHref()),
@@ -130,7 +128,7 @@ public class CustomerControllerTest {
 		try {
 			ResponseEntity<Link> linkRequestSaveFrank = controller.save(requestFrank);
 
-			HttpEntity<CustomerRequest> entityFind = new HttpEntity<CustomerRequest>(requestFrank, headers);
+			HttpEntity<CustomerRequest> entityFind = new HttpEntity<CustomerRequest>(requestFrank, new HttpHeaders());
 			
 			ResponseEntity<String> responseGet = restTemplate.exchange(
 					criaUrl("/api-customers/v1/customers?name=Frank"),
@@ -149,11 +147,12 @@ public class CustomerControllerTest {
 	
 	@Test
 	void testFindByDocumentNumberAndName() {
-		CustomerRequest requestFrank = new CustomerRequest("Frank", LocalDate.now(), DocumentTypeEnum.PASSPORT, "1234567890");
+		String documentNumber = "1234567890";
+		CustomerRequest requestFrank = new CustomerRequest("Frank", LocalDate.now(), DocumentTypeEnum.PASSPORT, documentNumber);
 		try {
 			ResponseEntity<Link> linkRequestSaveFrank = controller.save(requestFrank);
-
-			HttpEntity<CustomerRequest> entityFind = new HttpEntity<CustomerRequest>(requestFrank, headers);
+			
+			HttpEntity<CustomerRequest> entityFind = new HttpEntity<CustomerRequest>(requestFrank, new HttpHeaders());
 			
 			ResponseEntity<String> responseGet = restTemplate.exchange(
 					criaUrl("/api-customers/v1/customers?documentNumber=1234567890&name=Frank"),
@@ -176,7 +175,7 @@ public class CustomerControllerTest {
 		try {
 			ResponseEntity<Link> linkRequestSaveFrank = controller.save(requestFrank);
 
-			HttpEntity<CustomerRequest> entityFind = new HttpEntity<CustomerRequest>(requestFrank, headers);
+			HttpEntity<CustomerRequest> entityFind = new HttpEntity<CustomerRequest>(requestFrank, new HttpHeaders());
 			
 			ResponseEntity<String> responseGet = restTemplate.exchange(
 					criaUrl("/api-customers/v1/customers?documentNumber=1234567890"),
@@ -199,7 +198,7 @@ public class CustomerControllerTest {
 		try {
 			ResponseEntity<Link> linkRequestSaveFrank = controller.save(requestFrank);
 
-			HttpEntity<CustomerRequest> entityFind = new HttpEntity<CustomerRequest>(null, headers);
+			HttpEntity<CustomerRequest> entityFind = new HttpEntity<CustomerRequest>(null, new HttpHeaders());
 			
 			ResponseEntity<String> responseGet = restTemplate.exchange(
 					criaUrl("/api-customers/v1/customers?page=0&size=2"),

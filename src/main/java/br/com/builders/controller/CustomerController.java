@@ -5,9 +5,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
-
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -40,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = Constants.BASE_PATH_CUSTOMER, produces = APPLICATION_JSON_VALUE)
-public class CustomerController {
+public class CustomerController implements IApiCustomer {
 	
 	@Autowired
 	CustomerService customerService;
@@ -50,25 +49,27 @@ public class CustomerController {
 	
 	@GetMapping
 	public ResponseEntity<List<CustomerModel>> find(
-			@RequestParam(value = "documentNumber", required = false) String documentNumber,
+			@RequestParam(name = "documentNumber", required = false) String documentNumber,
 			@RequestParam(value = "name", required = false) String name,
 			@RequestParam(defaultValue = "0", required = false) int page,
-	        @RequestParam(defaultValue = "5", required = false) int size) throws Exception {
+	        @RequestParam(defaultValue = "5", required = false) int size) 
+	        		throws Exception {
 		
 		log.info("Requisicao de busca de cliente por numero de documento!");
 		
 		List<CustomerModel> customers = new ArrayList<>();
+		Optional<CustomerModel> model = null;
 		if (Objects.nonNull(documentNumber) && Objects.nonNull(name)) {
-			customers.add(customerService.findByDocumentNumberAndName(documentNumber, name)
-					.map(customerModelAssembler::toModel).get());
-
+			model =  customerService.findByDocumentNumberAndName(documentNumber, name)
+				.map(customerModelAssembler::toModel);
+			
 		} else if (Objects.nonNull(documentNumber) && Objects.isNull(name)) {
-			customers.add(customerService.findByDocumentNumber(documentNumber)
-					.map(customerModelAssembler::toModel).get()); 
-	
+			model = customerService.findByDocumentNumber(documentNumber)
+					.map(customerModelAssembler::toModel);
+			
 		} else if (Objects.isNull(documentNumber) && Objects.nonNull(name)) {
-			customers.add(customerService.findByName(name)
-					.map(customerModelAssembler::toModel).get()); 
+			model = customerService.findByName(name)
+					.map(customerModelAssembler::toModel); 
 			
 		} else {
 			Pageable paging = PageRequest.of(page, size);
@@ -77,12 +78,21 @@ public class CustomerController {
 			return new ResponseEntity<List<CustomerModel>>(
 					pageEntity.get().map(customerModelAssembler::toModel).collect(Collectors.toList()), HttpStatus.PARTIAL_CONTENT);
 		}
-
-		return new ResponseEntity<List<CustomerModel>>(customers, HttpStatus.OK);
+		
+		if (model.isPresent()) {
+			customers.add(model.get());
+			return new ResponseEntity<List<CustomerModel>>(customers, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<List<CustomerModel>>(customers, HttpStatus.NOT_FOUND);
+		}
 	}
 	
 	@GetMapping("/{id}") 
-	public ResponseEntity<CustomerModel> findById(@PathVariable final long id) {
+	public ResponseEntity<CustomerModel> findById(
+			@PathVariable final long id) {
+		
+		log.info("Requisicao de busca de cliente por id!");
+		
 		return customerService.findById(id)
 		        .map(customerModelAssembler::toModel) 
 		        .map(ResponseEntity::ok) 
@@ -90,9 +100,11 @@ public class CustomerController {
     }
 	
 	@PostMapping
-	public ResponseEntity<Link> save(@Valid @RequestBody final CustomerRequest request) throws Exception {
+	public ResponseEntity<Link> save(
+			@RequestBody final CustomerRequest request) throws Exception {
 
 		log.info("Requisicao para gravar cliente!");
+		
 		CustomerEntity customer = new CustomerEntity(null, request.getName(), request.getBirthDate(),
 				DocumentTypeEnum.PASSPORT, request.getDocumentNumber());
 	
@@ -104,7 +116,9 @@ public class CustomerController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Link> put(@PathVariable("id") final long id, @RequestBody CustomerRequest request) {
+	public ResponseEntity<Link> put(
+			@PathVariable("id") final long id,
+			@RequestBody CustomerRequest request) {
 
 		log.info("Requisicao para atualizar cliente com id: {}", id);
 
